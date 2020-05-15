@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="shortcut icon" href="/favicon.ico">
+		<title>Recipe App</title>
+		<link rel="stylesheet" href="main.css" type="text/css" >
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" >
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+
+        
+        
+        <!-- SPOONTACULAR-->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+		<!-- SPOONTACULAR -->
+		
+		<style>
+			#sourceLink{
+
+				text-decoration: none;
+				background-color: steelblue;
+				color: white;
+				/* padding: 14px 25px; */
+				/* text-align: center; */
+				display: inline-block;
+			}
+            .mySlides {
+				display:none;
+				border-style: solid;
+  				border-color: white;}
+		</style>
+	</head>
+	<body>
+		<nav>
+			<div class="top-nav-bar">
+				<div class="menu-bar">
+					<ul>
+						<li><a href="recipe.html"><i class="fa fa-shopping-basket"></i>Recipes</a></li>
+						<li class="logged-out"><a href="index.html" data-target="modal-login" onclick="signOut()">SignOut</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		
+		<main>
+          <div class="w3-content w3-section" style="max-width:500px">
+			<img class="mySlides" src="1.png" style="width:100%">
+			<img class="mySlides" src="1.png" style="width:100%">
+			<img class="mySlides" src="3.png" style="width:100%">
+			<img class="mySlides" src="4.png" style="width:100%">
+		  </div>
+
+		<div class="columntwo">
+			<div id="output">
+
+			</div>
+			<a href="" id="sourceLink"></a>
+		</div>
+	</main>
+	</body>
+	
+	<script>
+		function openmenu(){
+			document.getElementById("side-menu").style.display="block";
+			document.getElementById("menu-btn").style.display="none";
+			document.getElementById("close-btn").style.display="block";
+		}
+		function closemenu(){
+			document.getElementById("side-menu").style.display="none";
+			document.getElementById("menu-btn").style.display="block";
+			document.getElementById("close-btn").style.display="none";
+		}
+        function getsource(id){
+            $.ajax({
+                url:"https://api.spoonacular.com/recipes/"+id+"/information?apiKey=7535e6d4632744968fad97cc6a636309",
+                success: function(res){
+                    document.getElementById("sourceLink").innerHTML=res.sourceUrl
+					document.getElementById("sourceLink").href=res.sourceUrl
+					//document.getElementById("sourceLink").innerHTML=res.sourceUrl
+                }
+            });
+        }
+        function getrecepe(q){
+            $.ajax({
+                url:"https://api.spoonacular.com/recipes/search?apiKey=7535e6d4632744968fad97cc6a636309&number=1&query="+q,
+                success: function(res) {
+
+                document.getElementById("output").innerHTML="<h1>"+res.results[0].title+"</h1><br><img src='"+res.baseUri+res.results[0].image+"' width='400' /><br>Ready in "+res.results[0].readyInMinutes+" minutes"
+                getsource(res.results[0].id)
+                }
+            });
+        }
+        
+        var myIndex = 0;
+		carousel();
+
+		function carousel() {
+			var i;
+			var x = document.getElementsByClassName("mySlides");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";  
+			}
+			myIndex++;
+			if (myIndex > x.length) {myIndex = 1}    
+			x[myIndex-1].style.display = "block";  
+			setTimeout(carousel, 2000); // Change image every 1 seconds
+		}
+		
+	</script>
+	
+	
+</html>
+
